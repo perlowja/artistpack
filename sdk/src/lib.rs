@@ -1,4 +1,5 @@
 pub mod types;
+pub mod validate;
 
 pub const FORMAT_VERSION: &str = "0.1";
 
