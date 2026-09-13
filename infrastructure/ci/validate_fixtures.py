@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate every example manifest under examples/ against schema/*.schema.json.
+"""Validate example and shipped-pack manifests against schema/*.schema.json.
 
 Run via: uv run --with jsonschema --with pyyaml python3 infrastructure/ci/validate_fixtures.py
 """
@@ -12,7 +12,9 @@ from jsonschema import Draft202012Validator
 
 SCHEMA_MAP = {
     "pack.yaml": "schema/pack.schema.json",
+    "pack.json": "schema/pack.schema.json",
     "artist.yaml": "schema/artist.schema.json",
+    "artist.json": "schema/artist.schema.json",
     "feed.yaml": "schema/feed.schema.json",
 }
 
@@ -24,9 +26,12 @@ def main() -> int:
     }
 
     ok = True
-    fixtures = sorted(glob.glob("examples/**/*.yaml", recursive=True))
+    fixtures = sorted(
+        glob.glob("examples/**/*.yaml", recursive=True)
+        + glob.glob("packs/**/*.json", recursive=True)
+    )
     if not fixtures:
-        print("no fixtures found under examples/ -- failing closed")
+        print("no manifests found under examples/ or packs/ -- failing closed")
         return 1
 
     for path in fixtures:
