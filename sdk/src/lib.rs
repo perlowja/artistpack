@@ -1,3 +1,5 @@
+pub mod types;
+
 pub const FORMAT_VERSION: &str = "0.1";
 
 #[cfg(test)]
