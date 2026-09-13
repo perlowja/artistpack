@@ -1,6 +1,11 @@
 steps:
   - label: ":yaml: validate fixtures against JSON Schema"
-    command: "uv run --with jsonschema --with pyyaml python3 infrastructure/ci/validate_fixtures.py"
+    command: |
+      command -v uv >/dev/null 2>&1 || {
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="$$HOME/.local/bin:$$PATH"
+      }
+      uv run --with jsonschema --with pyyaml python3 infrastructure/ci/validate_fixtures.py
 
   - label: ":mag: schema files are valid JSON"
     command: |
