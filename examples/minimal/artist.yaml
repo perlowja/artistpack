@@ -1,0 +1,5 @@
+artistpack: "0.1"
+
+artist:
+  id: "example-artist"
+  name: "Example Artist"

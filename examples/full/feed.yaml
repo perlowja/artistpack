@@ -1,0 +1,10 @@
+artistpack_feed: "0.1"
+
+feed:
+  id: "org.artistpack.featured"
+  title: "ArtistPack Featured"
+  description: "Featured independent artists."
+  updated: "2026-09-13T18:00:00Z"
+
+packs:
+  - url: "https://artistpack.org/packs/nova-ashworth/worlds/pack.yaml"

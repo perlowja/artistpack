@@ -1,0 +1,33 @@
+artistpack: "0.1"
+
+pack:
+  id: "org.artistpack.example.minimal"
+  title: "Minimal Example Pack"
+  version: "1.0.0"
+
+artist:
+  id: "example-artist"
+  name: "Example Artist"
+
+rights:
+  copyright: "Copyright 2026 Example Artist"
+  license: "artistpack-display-license-1.0"
+
+artworks:
+  - id: "artwork-001"
+    title: "Untitled"
+    original:
+      file: "images/artwork-001.jpg"
+      sha256: "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+      width: 1920
+      height: 1080
+      mime_type: "image/jpeg"
+    variants:
+      - file: "images/artwork-001.jpg"
+        sha256: "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+        width: 1920
+        height: 1080
+    attribution:
+      display_name: "Example Artist"
+    provenance:
+      c2pa: false

@@ -1,0 +1,81 @@
+artistpack: "0.1"
+
+pack:
+  id: "org.artistpack.novaashworth.worlds"
+  title: "Other Worlds"
+  version: "1.0.0"
+  description: "Selected works by Nova Ashworth."
+  created: "2026-09-13"
+  updated: "2026-09-13"
+
+artist:
+  id: "nova-ashworth"
+  name: "Nova Ashworth"
+  bio: "Digital artist working in speculative and science-fiction cityscapes."
+  website: "https://example.com/nova-ashworth"
+  patreon: "https://patreon.com/example-novaashworth"
+  support_url: "https://example.com/nova-ashworth/support"
+  socials:
+    instagram: "https://instagram.com/example-novaashworth"
+    bluesky: "https://bsky.app/profile/example-novaashworth"
+
+rights:
+  copyright: "Copyright 2026 Nova Ashworth"
+  license: "artistpack-display-license-1.0"
+  attribution_required: true
+
+artworks:
+  - id: "city-001"
+    title: "Other Worlds IV"
+    description: "A speculative cityscape rendered in cool blues and violet light."
+    original:
+      file: "images/city-001.jpg"
+      sha256: "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1"
+      width: 7680
+      height: 4320
+      mime_type: "image/jpeg"
+
+    variants:
+      - file: "derived/city-001-3840x2160.jpg"
+        sha256: "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2"
+        width: 3840
+        height: 2160
+
+      - file: "derived/city-001-2560x1440.jpg"
+        sha256: "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3"
+        width: 2560
+        height: 1440
+
+    tags:
+      - digital-art
+      - science-fiction
+      - cityscape
+
+    palette:
+      dominant: null
+
+    attribution:
+      display_name: "Nova Ashworth"
+      url: "https://example.com/nova-ashworth"
+
+    provenance:
+      c2pa: true
+      manifest_file: "provenance/city-001.c2pa"
+
+    display:
+      crop_mode: "smart"
+      focal_point:
+        x: 0.5
+        y: 0.5
+      allow_crop: true
+      allow_scale: true
+
+    accessibility:
+      alt_text: "A tall speculative city skyline lit in blue and violet under a dark sky."
+
+    creation:
+      artist_declares_human_created: true
+
+compatibility:
+  wallpaper: true
+  lock_screen: true

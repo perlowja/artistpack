@@ -1,0 +1,11 @@
+artistpack_feed: "0.1"
+
+feed:
+  id: "org.artistpack.new"
+  title: "New on ArtistPack"
+  description: "Recently published packs across all categories."
+  updated: "2026-09-13T18:00:00Z"
+
+packs:
+  - url: "https://artistpack.org/packs/nova-ashworth/worlds/pack.yaml"
+  - url: "https://artistpack.org/packs/kai-renshaw/example/pack.yaml"

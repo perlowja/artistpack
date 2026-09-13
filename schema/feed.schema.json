@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artistpack.org/schema/0.1/feed.schema.json",
+  "title": "ArtistPack Feed Manifest 0.1",
+  "type": "object",
+  "required": ["artistpack_feed", "feed", "packs"],
+  "additionalProperties": false,
+  "properties": {
+    "artistpack_feed": { "type": "string", "const": "0.1" },
+    "feed": {
+      "type": "object",
+      "required": ["id", "title", "updated"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9.][a-z0-9.-]*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "updated": { "type": "string", "format": "date-time" }
+      }
+    },
+    "packs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url"],
+        "additionalProperties": false,
+        "properties": {
+          "url": { "type": "string", "format": "uri-reference" }
+        }
+      }
+    }
+  }
+}

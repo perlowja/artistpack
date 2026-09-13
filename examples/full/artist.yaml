@@ -1,0 +1,22 @@
+artistpack: "0.1"
+
+artist:
+  id: "nova-ashworth"
+  name: "Nova Ashworth"
+  bio: "Digital artist working in speculative and science-fiction cityscapes."
+  avatar: "artist.jpg"
+
+  website: "https://example.com/nova-ashworth"
+  support:
+    patreon: "https://patreon.com/example-novaashworth"
+    ko_fi: null
+    shop: null
+    commissions: null
+
+  socials:
+    instagram: "https://instagram.com/example-novaashworth"
+    bluesky: "https://bsky.app/profile/example-novaashworth"
+    mastodon: null
+
+  packs:
+    - "packs/other-worlds/pack.yaml"

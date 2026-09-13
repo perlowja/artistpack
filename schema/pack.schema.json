@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artistpack.org/schema/0.1/pack.schema.json",
+  "title": "ArtistPack Pack Manifest 0.1",
+  "type": "object",
+  "required": ["artistpack", "pack", "artist", "rights", "artworks"],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "rights": {
+      "type": "object",
+      "required": ["copyright", "license"],
+      "additionalProperties": false,
+      "properties": {
+        "copyright": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "attribution_required": { "type": "boolean", "default": true }
+      }
+    },
+    "imageRef": {
+      "type": "object",
+      "required": ["file", "sha256", "width", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "width": { "type": "integer", "exclusiveMinimum": 0 },
+        "height": { "type": "integer", "exclusiveMinimum": 0 },
+        "mime_type": {
+          "type": "string",
+          "enum": ["image/jpeg", "image/png", "image/webp"]
+        }
+      }
+    }
+  },
+  "properties": {
+    "artistpack": { "type": "string", "const": "0.1" },
+    "requires": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional forward-compatibility capability strings. See spec section 8. A client that does not recognize an entry MUST refuse to fully process this pack."
+    },
+    "pack": {
+      "type": "object",
+      "required": ["id", "title", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9.][a-z0-9.-]*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "description": { "type": "string" },
+        "created": { "type": "string", "format": "date" },
+        "updated": { "type": "string", "format": "date" }
+      }
+    },
+    "artist": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "bio": { "type": "string" },
+        "website": { "type": "string", "format": "uri" },
+        "patreon": { "type": "string", "format": "uri" },
+        "support_url": { "type": "string", "format": "uri" },
+        "socials": { "type": "object" }
+      }
+    },
+    "rights": { "$ref": "#/$defs/rights" },
+    "artworks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "original", "variants", "attribution", "provenance"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "original": {
+            "allOf": [
+              { "$ref": "#/$defs/imageRef" },
+              { "required": ["mime_type"] }
+            ]
+          },
+          "variants": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/imageRef" }
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "palette": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "dominant": { "type": ["string", "null"] }
+            }
+          },
+          "rights": { "$ref": "#/$defs/rights" },
+          "attribution": {
+            "type": "object",
+            "required": ["display_name"],
+            "additionalProperties": false,
+            "properties": {
+              "display_name": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "format": "uri" }
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "required": ["c2pa"],
+            "additionalProperties": false,
+            "properties": {
+              "c2pa": {
+                "type": "boolean",
+                "description": "Whether a C2PA manifest is attached. Required field per spec section 9; a registry may separately require this to be true with a valid manifest_file before publishing."
+              },
+              "manifest_file": {
+                "type": "string",
+                "description": "Path to the .c2pa manifest, required when c2pa is true."
+              }
+            },
+            "if": { "properties": { "c2pa": { "const": true } } },
+            "then": { "required": ["c2pa", "manifest_file"] }
+          },
+          "display": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "crop_mode": { "type": "string", "enum": ["smart", "center", "none"] },
+              "focal_point": {
+                "type": "object",
+                "required": ["x", "y"],
+                "additionalProperties": false,
+                "properties": {
+                  "x": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "y": { "type": "number", "minimum": 0, "maximum": 1 }
+                }
+              },
+              "allow_crop": { "type": "boolean" },
+              "allow_scale": { "type": "boolean" }
+            }
+          },
+          "accessibility": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "alt_text": { "type": "string" }
+            }
+          },
+          "creation": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "artist_declares_human_created": {
+                "type": "boolean",
+                "description": "An artist assertion, not a verified fact. See spec section 9 and docs/architecture.md's C2PA section."
+              }
+            }
+          }
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "wallpaper": { "type": "boolean" },
+        "lock_screen": { "type": "boolean" }
+      }
+    }
+  }
+}

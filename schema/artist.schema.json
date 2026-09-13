@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artistpack.org/schema/0.1/artist.schema.json",
+  "title": "ArtistPack Artist Manifest 0.1",
+  "type": "object",
+  "required": ["artistpack", "artist"],
+  "additionalProperties": false,
+  "properties": {
+    "artistpack": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Format version. See spec/artistpack-0.1.md section 2."
+    },
+    "artist": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Stable identifier. Never reused, never mutable. See spec section 3."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "bio": { "type": "string" },
+        "avatar": { "type": "string" },
+        "website": { "type": "string", "format": "uri" },
+        "support": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "null"], "format": "uri" },
+          "properties": {
+            "patreon": { "type": ["string", "null"], "format": "uri" },
+            "ko_fi": { "type": ["string", "null"], "format": "uri" },
+            "shop": { "type": ["string", "null"], "format": "uri" },
+            "commissions": { "type": ["string", "null"], "format": "uri" }
+          }
+        },
+        "socials": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "null"], "format": "uri" }
+        },
+        "packs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Relative or absolute URLs to this artist's pack.yaml manifests."
+        }
+      }
+    }
+  }
+}
