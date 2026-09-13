@@ -1,0 +1,10 @@
+steps:
+  - label: ":yaml: validate fixtures against JSON Schema"
+    command: "uv run --with jsonschema --with pyyaml python3 infrastructure/ci/validate_fixtures.py"
+
+  - label: ":mag: schema files are valid JSON"
+    command: |
+      for f in schema/*.schema.json; do
+        python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$$f" || exit 1
+        echo "OK $$f"
+      done
