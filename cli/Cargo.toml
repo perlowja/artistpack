@@ -11,3 +11,6 @@ path = "src/main.rs"
 artistpack-sdk = { path = "../sdk" }
 clap = { version = "4", features = ["derive"] }
 serde_yaml = "0.9"
+
+[dev-dependencies]
+tempfile = "3"
