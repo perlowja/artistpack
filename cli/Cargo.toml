@@ -1,0 +1,13 @@
+[package]
+name = "artistpack-cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "artistpack"
+path = "src/main.rs"
+
+[dependencies]
+artistpack-sdk = { path = "../sdk" }
+clap = { version = "4", features = ["derive"] }
+serde_yaml = "0.9"
