@@ -16,7 +16,7 @@ first, escalating only if genuinely needed.
 | 4 | `examples/{minimal,full,feed}/` fixtures | Claude (direct) | **Done**, validated against schema |
 | 5 | Rust SDK (parse/validate/verify/cache) | zoder, rung 1 (local models) | Not started |
 | 6 | CLI validator (`artistpack validate pack.yaml` must work) | zoder, rung 1 | Not started |
-| 7 | Minimal API/backend (FastAPI, `docs/api-design.md`) | zoder → Codex if complexity warrants | Not started |
+| 7 | Minimal API/backend (FastAPI, `docs/api-design.md`) | zoder → Codex if complexity warrants | **Done** — `backend/` (FastAPI + SQLAlchemy + Alembic; 58 pytest tests covering publish-gate 4 checks, pagination, filters, ETag, OAuth stub, ingest, audit-log, unpublish) |
 | 8 | Artist dashboard (Next.js) | zoder → Codex | Not started |
 | 9 | Image processing pipeline, **including the C2PA signing gate** — no longer deferrable, see `docs/tech-decisions.md` | zoder → Codex | Not started |
 | 10 | Public registry/feed | After 7–9 land | Not started |

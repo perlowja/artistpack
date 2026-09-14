@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Test caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtualenvs
+.venv/
+venv/
+
+# Dev database / storage
+*.db
+*.sqlite
+*.sqlite3
+storage/
+
+# Editor
+.vscode/
+.idea/
