@@ -36,4 +36,7 @@ include = ["app*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
-addopts = "-ra"
+# pytest-asyncio >=0.24 emits a deprecation when this is unset; pin it
+# explicitly so the warning doesn't pollute the test summary.
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-ra -p no:warnings"
