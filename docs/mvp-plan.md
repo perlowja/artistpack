@@ -17,7 +17,7 @@ first, escalating only if genuinely needed.
 | 5 | Rust SDK (parse/validate/verify/cache) | zoder, rung 1 (local models) | Not started |
 | 6 | CLI validator (`artistpack validate pack.yaml` must work) | zoder, rung 1 | Not started |
 | 7 | Minimal API/backend (FastAPI, `docs/api-design.md`) | zoder → Codex if complexity warrants | **Done** — `backend/` (FastAPI + SQLAlchemy + Alembic; 58 pytest tests covering publish-gate 4 checks, pagination, filters, ETag, OAuth stub, ingest, audit-log, unpublish) |
-| 8 | Artist dashboard (Next.js) | zoder → Codex | Not started |
+| 8 | Artist dashboard (Next.js) | zoder → Codex | **Done** — `frontend/` (Next.js 14 App Router + TypeScript; 39 vitest tests covering validation checklist, publish-button disabled-state, artwork upload form's client-side validation, end-to-end-ish login + packs + pack-detail flows against mocked API; `npm ci && npm run build && npm test` green) |
 | 9 | Image processing pipeline, **including the C2PA signing gate** — no longer deferrable, see `docs/tech-decisions.md` | zoder → Codex | Not started |
 | 10 | Public registry/feed | After 7–9 land | Not started |
 | 11 | Connect Singularity (`ArtistPackManager` second backend, `docs/migration-from-singularity.md`) or a simple standalone Linux client | After SDK (5) exists | Not started |
