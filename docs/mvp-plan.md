@@ -14,8 +14,8 @@ first, escalating only if genuinely needed.
 | 2 | `spec/artistpack-0.1.md` | Claude (direct) | **Done** |
 | 3 | `schema/{artist,pack,feed}.schema.json` | Claude (direct) | **Done**, fixtures validate |
 | 4 | `examples/{minimal,full,feed}/` fixtures | Claude (direct) | **Done**, validated against schema |
-| 5 | Rust SDK (parse/validate/verify/cache) | zoder, rung 1 (local models) | Not started |
-| 6 | CLI validator (`artistpack validate pack.yaml` must work) | zoder, rung 1 | Not started |
+| 5 | Rust SDK (parse/validate/verify/cache) | zoder, rung 1 (local models) | **Done** — `sdk/` (parse, schema/business-rule validation, streaming SHA-256 verify, local staging/atomic-activate cache; 23 tests, `cargo test --workspace` green) |
+| 6 | CLI validator (`artistpack validate pack.yaml` must work) | zoder, rung 1 | **Done** — `cli/` (`validate` subcommand + 4 integration tests, green) |
 | 7 | Minimal API/backend (FastAPI, `docs/api-design.md`) | zoder → Codex if complexity warrants | **Done** — `backend/` (FastAPI + SQLAlchemy + Alembic; 58 pytest tests covering publish-gate 4 checks, pagination, filters, ETag, OAuth stub, ingest, audit-log, unpublish) |
 | 8 | Artist dashboard (Next.js) | zoder → Codex | **Done** — `frontend/` (Next.js 14 App Router + TypeScript; 39 vitest tests covering validation checklist, publish-button disabled-state, artwork upload form's client-side validation, end-to-end-ish login + packs + pack-detail flows against mocked API; `npm ci && npm run build && npm test` green) |
 | 9 | Image processing pipeline, **including the C2PA signing gate** — no longer deferrable, see `docs/tech-decisions.md` | zoder → Codex | Not started |
