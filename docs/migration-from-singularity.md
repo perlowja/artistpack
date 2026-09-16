@@ -109,6 +109,26 @@ builds anything.** (operator, 2026-09-16, refining the above same day)
    They build and host their own `.deb` the same way the centralized
    backend does.
 
+   **NCZ-OS IS an instance of this path, unchanged, starting now**
+   (operator, 2026-09-16): NCZ-OS's existing wallpaper pipeline — its own
+   apt repo (`ncz-apt`, reprepro + Buildkite Packages + Cloudflare R2, the
+   same infra `ncz-singularity-desktop` already ships through),
+   `cix-installer`'s `build/build-wallpaper-contrib-deb.sh`, the
+   `packs/{ncz,brandon-perlow,alex-jay-brady,singularity}/{artist,pack}.json`
+   manifests already staged there — **is simply "an artist self-distributing
+   their own pack," with NCZ as that artist and `ncz-apt` as that artist's
+   own repo.** It does not integrate with or depend on the centralized
+   artistpack.org backend, and explicitly does not need to while this
+   design gets hashed out with Mirko. **Do not touch
+   `build-wallpaper-contrib-deb.sh` or the NCZ apt pipeline to implement
+   any of this section** — it already IS a correct (if manifest-format-
+   informal, `.json` not schema-blessed-YAML-filename) instance of the
+   self-distribution path, and stays exactly as it works today. The only
+   future change, and only once the shared build tool below actually
+   exists: point that script at the shared tool instead of its own
+   hand-rolled packaging logic, as a drop-in replacement with the same
+   output — never a redesign of NCZ's own shipping pipeline.
+
 **Both paths use the SAME build tool** — turning a validated `pack.yaml` +
 its assets into a real, correctly-formed `.deb` (sha256-verified images,
 the manifest bundled inside the package, a `.collection` file written,
