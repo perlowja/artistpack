@@ -84,22 +84,77 @@ gate — OCS-sourced content, given its already-weaker license provenance
 ("no license stated" is common per the design doc's own finding), is
 exactly the content where a real provenance record adds the most value.
 
-### 3. `ArtistPackManager` gets a second inventory backend
+### 3. Feed-sourced packs install as real `.deb`s too (operator decision, 2026-09-16)
 
-`ArtistPackManager` (`singularity-shell/src/core/artist_pack_manager.vala`)
-is deliberately built to "know nothing about apt" — it shells out to two
-fixed-path helper scripts and stays additive/opt-in by design (its own
-class-doc comment states this explicitly). The natural extension is a
-**second backend**, using the ArtistPack Rust SDK to fetch, verify, and
-cache packs from an ArtistPack.org feed URL, laid out under the same
-`~/.local/share/backgrounds/<id>/` + `.collection` convention the wallpaper
-grid already reads (`docs/architecture.md`'s "first reference consumer"
-principle). The existing apt-based backend keeps serving NCZ-signed,
-on-distro curated packs — its security model (apt + PolicyKit) is already
-solved and shouldn't be replaced. The new feed-based backend is how
-third-party, non-NCZ artists reach Singularity users without needing to be
-packaged into a `.deb` and pushed through an apt repository at all. This
-is Task 11 in `docs/mvp-plan.md`, scoped after the backend/SDK exist.
+**Reverses the "no `.deb`, no apt repository at all" framing below** — kept
+struck-through rather than deleted so the reasoning that got superseded is
+still visible. Real, current decision: feed-sourced (self-hosted or
+artistpack.org-centralized) packs ship as real `.deb` packages and install
+through the same apt+PolicyKit mechanism as curated packs, not through a
+parallel raw-file cache. Rationale: reuse the solved integrity/removal/
+dependency semantics dpkg already provides rather than reinventing them in
+a bespoke cache layer — "for sanity," in the operator's own words.
+
+**Two distribution paths, one shared build mechanism — the client never
+builds anything.** (operator, 2026-09-16, refining the above same day)
+
+1. **Centralized**: artistpack.org's own backend builds a real `.deb` for
+   every pack published to its registry, at publish time, and serves it
+   alongside `pack.yaml` in the feed/registry response.
+2. **Artist self-distribution**: an artist hosts their OWN pack
+   independently of artistpack.org — no registry, no publish gate, no
+   dependency on artistpack.org's existence (the same "zero dependency"
+   property `docs/architecture.md`'s trust-boundary diagram already
+   requires of the format itself, extended here to the install artifact).
+   They build and host their own `.deb` the same way the centralized
+   backend does.
+
+**Both paths use the SAME build tool** — turning a validated `pack.yaml` +
+its assets into a real, correctly-formed `.deb` (sha256-verified images,
+the manifest bundled inside the package, a `.collection` file written,
+porting the approach `cix-installer`'s
+`build/build-wallpaper-contrib-deb.sh` already uses for NCZ's curated
+packs). That tool belongs in this repo (`sdk/` or a new `artistpack
+build-deb pack.yaml` CLI subcommand), not buried inside `cix-installer` —
+it has to be usable standalone by a self-hosting artist who has never
+heard of NCZ-OS, per the same self-hosting requirement that governs the
+manifest format itself. `cix-installer`'s own script becomes (eventually)
+a thin caller of this shared tool for NCZ's own curated packs, rather than
+a second, divergent implementation.
+
+The client (Singularity or any OS integration) never builds a `.deb`
+itself in either path — it always just fetches one (from either source)
+and installs it, same as it already does for curated packs today. This is
+the "idempotent config" a distro needs: point at a feed URL, whichever of
+the two paths produced it, and the client-side install mechanism is
+identical either way.
+
+**Status correction, live-verified 2026-09-16 (not assumed from this
+doc's own 09-13 claim):** `ArtistPackManager` and the
+`dev.sinty.desktop.artist-pack-apt-sources` GSettings key described above
+as "already exists, solved problem" **no longer exist anywhere in current
+`singularity-shell`** — a fresh clone + full-tree grep found zero hits.
+They were superseded in the 3 days since this doc was written by the
+wallpaper source-selector refactor (PR #25, merged) and the still-open OCS
+browser PR #26 (`wallpaper_ocs.vala`, `wallpaper_provider.vala`) — both
+HTTP/file-cache based, no apt/pkexec install path. **This means Task 11's
+"extend the existing apt-based backend" premise needs re-verification
+against whatever mechanism singularity-shell settles on
+next** — either reviving an apt-install path (matching this section's
+`.deb`-for-sanity decision) or wiring `.deb` install into the newer
+OCS/provider architecture. Confirm the real current shape before writing
+Task 11's client-side code; do not assume `artist_pack_manager.vala` is
+there to extend.
+
+~~The natural extension is a **second backend**, using the ArtistPack Rust~~
+~~SDK to fetch, verify, and cache packs from an ArtistPack.org feed URL,~~
+~~laid out under the same `~/.local/share/backgrounds/<id>/` + `.collection`~~
+~~convention the wallpaper grid already reads (`docs/architecture.md`'s~~
+~~"first reference consumer" principle). ... The new feed-based backend is~~
+~~how third-party, non-NCZ artists reach Singularity users without needing~~
+~~to be packaged into a `.deb` and pushed through an apt repository at~~
+~~all.~~ This is Task 11 in `docs/mvp-plan.md`, scoped after the
+backend/SDK exist (SDK now done, see `docs/mvp-plan.md`).
 
 ## What does NOT change as part of this migration
 
