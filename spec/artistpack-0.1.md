@@ -211,6 +211,9 @@ feed:
   updated: "2026-09-13T18:00:00Z"
 packs:
   - url: "https://artistpack.org/packs/nova-ashworth/worlds/pack.yaml"
+    pak_url: "https://artistpack.org/packs/nova-ashworth/worlds/org.artistpack.novaashworth.worlds-1.0.0.pak.gz"
+    pak_sha256: "9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca7"
+    pak_size: 4194304
 ```
 
 Feeds are plain lists of pack URLs, independent of artistpack.org — any
@@ -219,6 +222,26 @@ subscribe to it (`docs/architecture.md`'s self-hosting requirement applies
 identically to feeds). A feed's own `updated` timestamp lets a client
 short-circuit re-fetching every referenced pack when nothing changed
 (§ Feed Update Behavior, `docs/mvp-plan.md`).
+
+Each entry may additionally carry three optional fields pointing at the
+buildable `.pak.gz` artifact defined in `docs/pak-package-format.md`:
+
+- `pak_url` — a URI-reference to the archive, fetched when a client
+  installs the pack.
+- `pak_sha256` — 64 lowercase hex characters, the SHA-256 of the archive
+  itself. Clients verify this against the downloaded archive before
+  extraction as a fast pre-extraction integrity check (the per-artwork
+  SHA-256s in the extracted `pack.yaml` are re-verified regardless after
+  extraction; `pak_sha256` is a download-time corruption check, not a
+  replacement).
+- `pak_size` — the archive's byte size in bytes (integer ≥ 0), useful for
+  progress UI and preflight size checks.
+
+All three are optional: a feed entry can exist before its archive is
+built (the shared `artistpack build-pak` CLI subcommand produces both
+the archive and the values for these fields; a future task wires the
+artistpack.org backend to call it at publish time and emit the result
+into the registry feed).
 
 ## 11. Compatibility rule (post-1.0)
 

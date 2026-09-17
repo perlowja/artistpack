@@ -14,12 +14,17 @@ impl fmt::Display for ValidationError {
 }
 
 fn err(path: impl Into<String>, message: impl Into<String>) -> ValidationError {
-    ValidationError { path: path.into(), message: message.into() }
+    ValidationError {
+        path: path.into(),
+        message: message.into(),
+    }
 }
 
 fn is_pack_id(s: &str) -> bool {
     let mut chars = s.chars();
-    let Some(first) = chars.next() else { return false };
+    let Some(first) = chars.next() else {
+        return false;
+    };
     if !(first.is_ascii_lowercase() || first.is_ascii_digit() || first == '.') {
         return false;
     }
@@ -28,7 +33,9 @@ fn is_pack_id(s: &str) -> bool {
 
 fn is_slug_id(s: &str) -> bool {
     let mut chars = s.chars();
-    let Some(first) = chars.next() else { return false };
+    let Some(first) = chars.next() else {
+        return false;
+    };
     if !(first.is_ascii_lowercase() || first.is_ascii_digit()) {
         return false;
     }
@@ -36,17 +43,29 @@ fn is_slug_id(s: &str) -> bool {
 }
 
 fn is_sha256(s: &str) -> bool {
-    s.len() == 64 && s.chars().all(|c| c.is_ascii_hexdigit() && !c.is_ascii_uppercase())
+    s.len() == 64
+        && s.chars()
+            .all(|c| c.is_ascii_hexdigit() && !c.is_ascii_uppercase())
 }
 
 fn is_semver(s: &str) -> bool {
     let parts: Vec<&str> = s.split('.').collect();
-    parts.len() == 3 && parts.iter().all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
+    parts.len() == 3
+        && parts
+            .iter()
+            .all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
 }
 
-fn validate_image_ref(prefix: &str, image: &crate::types::ImageRef, errors: &mut Vec<ValidationError>) {
+fn validate_image_ref(
+    prefix: &str,
+    image: &crate::types::ImageRef,
+    errors: &mut Vec<ValidationError>,
+) {
     if !is_sha256(&image.sha256) {
-        errors.push(err(format!("{prefix}.sha256"), "must be 64 lowercase hex characters"));
+        errors.push(err(
+            format!("{prefix}.sha256"),
+            "must be 64 lowercase hex characters",
+        ));
     }
     if image.width == 0 {
         errors.push(err(format!("{prefix}.width"), "must be greater than 0"));
@@ -83,7 +102,10 @@ pub fn validate_pack(pack: &Pack) -> Vec<ValidationError> {
         validate_image_ref(&format!("{base}.original"), &artwork.original, &mut errors);
 
         if artwork.variants.is_empty() {
-            errors.push(err(format!("{base}.variants"), "must contain at least one variant"));
+            errors.push(err(
+                format!("{base}.variants"),
+                "must contain at least one variant",
+            ));
         }
         for (j, variant) in artwork.variants.iter().enumerate() {
             validate_image_ref(&format!("{base}.variants[{j}]"), variant, &mut errors);
@@ -99,10 +121,16 @@ pub fn validate_pack(pack: &Pack) -> Vec<ValidationError> {
         if let Some(display) = &artwork.display {
             if let Some(fp) = &display.focal_point {
                 if !(0.0..=1.0).contains(&fp.x) {
-                    errors.push(err(format!("{base}.display.focal_point.x"), "must be between 0 and 1"));
+                    errors.push(err(
+                        format!("{base}.display.focal_point.x"),
+                        "must be between 0 and 1",
+                    ));
                 }
                 if !(0.0..=1.0).contains(&fp.y) {
-                    errors.push(err(format!("{base}.display.focal_point.y"), "must be between 0 and 1"));
+                    errors.push(err(
+                        format!("{base}.display.focal_point.y"),
+                        "must be between 0 and 1",
+                    ));
                 }
             }
         }
@@ -215,7 +243,8 @@ artworks:
     fn out_of_range_focal_point_is_rejected() {
         use crate::types::FocalPoint;
         let mut pack = Pack::from_yaml_str(&fixture("full/pack.yaml")).unwrap();
-        pack.artworks[0].display.as_mut().unwrap().focal_point = Some(FocalPoint { x: 1.5, y: 0.5 });
+        pack.artworks[0].display.as_mut().unwrap().focal_point =
+            Some(FocalPoint { x: 1.5, y: 0.5 });
         let errors = validate_pack(&pack);
         assert!(errors.iter().any(|e| e.path.contains("focal_point")));
     }

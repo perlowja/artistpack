@@ -193,4 +193,10 @@ pub struct FeedMeta {
 #[derive(Debug, Deserialize)]
 pub struct FeedPackRef {
     pub url: String,
+    #[serde(default)]
+    pub pak_url: Option<String>,
+    #[serde(default)]
+    pub pak_sha256: Option<String>,
+    #[serde(default)]
+    pub pak_size: Option<u64>,
 }

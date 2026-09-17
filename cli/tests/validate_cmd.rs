@@ -19,7 +19,11 @@ fn validate_accepts_minimal_fixture() {
         .output()
         .expect("failed to run artistpack binary");
 
-    assert!(output.status.success(), "stderr: {}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "stderr: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     assert!(String::from_utf8_lossy(&output.stdout).contains("OK:"));
 }
 
@@ -31,13 +35,18 @@ fn validate_accepts_full_fixture() {
         .output()
         .expect("failed to run artistpack binary");
 
-    assert!(output.status.success(), "stderr: {}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "stderr: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
 }
 
 #[test]
 fn validate_rejects_manifest_with_bad_sha256() {
     let tmp = tempfile::NamedTempFile::with_suffix(".yaml").unwrap();
-    let mut broken = std::fs::read_to_string(repo_root().join("examples/minimal/pack.yaml")).unwrap();
+    let mut broken =
+        std::fs::read_to_string(repo_root().join("examples/minimal/pack.yaml")).unwrap();
     broken = broken.replace(
         "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
         "not-a-valid-hash",

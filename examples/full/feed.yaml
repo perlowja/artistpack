@@ -8,3 +8,6 @@ feed:
 
 packs:
   - url: "https://artistpack.org/packs/nova-ashworth/worlds/pack.yaml"
+    pak_url: "https://artistpack.org/packs/nova-ashworth/worlds/org.artistpack.novaashworth.worlds-1.0.0.pak.gz"
+    pak_sha256: "1111111111111111111111111111111111111111111111111111111111111111"
+    pak_size: 4194304

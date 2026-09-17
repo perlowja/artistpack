@@ -12,7 +12,7 @@ fn parses_minimal_pack() {
     assert_eq!(pack.pack.id, "org.artistpack.example.minimal");
     assert_eq!(pack.artworks.len(), 1);
     assert_eq!(pack.artworks[0].id, "artwork-001");
-    assert_eq!(pack.artworks[0].provenance.c2pa, false);
+    assert!(!pack.artworks[0].provenance.c2pa);
     assert!(pack.artworks[0].provenance.manifest_file.is_none());
 }
 
@@ -22,7 +22,7 @@ fn parses_full_pack() {
     assert_eq!(pack.pack.id, "org.artistpack.novaashworth.worlds");
     assert_eq!(pack.artworks[0].variants.len(), 2);
     assert_eq!(pack.artworks[0].attribution.display_name, "Nova Ashworth");
-    assert_eq!(pack.artworks[0].provenance.c2pa, true);
+    assert!(pack.artworks[0].provenance.c2pa);
     assert_eq!(
         pack.artworks[0].provenance.manifest_file.as_deref(),
         Some("provenance/city-001.c2pa")
@@ -54,5 +54,8 @@ fn unknown_top_level_field_is_ignored_not_rejected() {
     let mut yaml = fixture("minimal/pack.yaml");
     yaml.push_str("\nsome_future_field: \"a client from 2030 invented this\"\n");
     let pack = Pack::from_yaml_str(&yaml);
-    assert!(pack.is_ok(), "unknown field must not break parsing: {pack:?}");
+    assert!(
+        pack.is_ok(),
+        "unknown field must not break parsing: {pack:?}"
+    );
 }

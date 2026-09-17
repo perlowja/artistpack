@@ -25,7 +25,10 @@
         "required": ["url"],
         "additionalProperties": false,
         "properties": {
-          "url": { "type": "string", "format": "uri-reference" }
+          "url": { "type": "string", "format": "uri-reference" },
+          "pak_url": { "type": "string", "format": "uri-reference" },
+          "pak_sha256": { "$ref": "https://artistpack.org/schema/0.1/pack.schema.json#/$defs/sha256" },
+          "pak_size": { "type": "integer", "minimum": 0 }
         }
       }
     }

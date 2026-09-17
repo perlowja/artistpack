@@ -1,5 +1,6 @@
 pub mod cache;
 pub mod hash;
+pub mod pak;
 pub mod types;
 pub mod validate;
 

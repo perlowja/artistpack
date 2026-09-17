@@ -8,7 +8,9 @@ pub struct Cache {
 
 impl Cache {
     pub fn new(base_dir: impl Into<PathBuf>) -> Self {
-        Self { base_dir: base_dir.into() }
+        Self {
+            base_dir: base_dir.into(),
+        }
     }
 
     fn staging_path(&self, pack_id: &str) -> PathBuf {
@@ -78,7 +80,10 @@ mod tests {
 
         let live = cache.activate("org.artistpack.example.minimal").unwrap();
 
-        assert!(!staging.exists(), "staging dir must not remain after activation");
+        assert!(
+            !staging.exists(),
+            "staging dir must not remain after activation"
+        );
         assert!(live.exists());
         assert_eq!(
             fs::read_to_string(live.join("pack.yaml")).unwrap(),
@@ -107,6 +112,9 @@ mod tests {
         fs::write(staging2.join("pack.yaml"), b"version: 2").unwrap();
         let live = cache.activate("pack-a").unwrap();
 
-        assert_eq!(fs::read_to_string(live.join("pack.yaml")).unwrap(), "version: 2");
+        assert_eq!(
+            fs::read_to_string(live.join("pack.yaml")).unwrap(),
+            "version: 2"
+        );
     }
 }
